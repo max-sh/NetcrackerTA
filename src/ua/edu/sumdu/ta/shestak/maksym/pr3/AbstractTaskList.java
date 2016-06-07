@@ -13,30 +13,32 @@ public abstract class AbstractTaskList {
 
 
     /**
-     * метод для добавления не уникальных задач
-     * @param task задача
+     * Method for adding tasks
+     * @param task task
      */
     public abstract void add(Task task);
 
     /**
-     * метод для удаления всех задач равных входной
-     * @param task задача
+     * Method for removing tasks that equals input
+     * @param task task
      */
     public abstract void remove(Task task);
 
 
     /**
-     * Метод получения задачи под заданным номером
-     * @param index номер задачи
-     * @return задача
+     * Method for getting task with given index
+     * @param index index
+     * @return task
      */
     public abstract Task getTask(int index);
 
     /**
-     * Метод получения количества задач в текущем списке
-     * @return количество задач в списку
+     * Method for getting task count in list
+     * @return task count in list
      */
     public int size() {
         return itemsCount;
     }
+
+    public abstract Task[] incoming(int from, int to);
 }

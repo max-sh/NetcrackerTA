@@ -12,19 +12,19 @@ import java.util.Objects;
  */
 class LinkedTaskList extends AbstractTaskList {
     private class Element {
-        Object data;
+        Task data;
         Element next;
 
-        public Element(Object data) {
+        public Element(Task data) {
             next = null;
             this.data = data;
         }
 
-        public Object getData() {
+        public Task getData() {
             return data;
         }
 
-        public void setData(Object data) {
+        public void setData(Task data) {
             this.data = data;
         }
 
@@ -38,9 +38,9 @@ class LinkedTaskList extends AbstractTaskList {
     }
 
     private Element head;
-
-    LinkedTaskList() {
-
+    private static int linkedTaskListCount = 0;
+    public LinkedTaskList() {
+        linkedTaskListCount++;
     }
 
     /**
@@ -50,14 +50,25 @@ class LinkedTaskList extends AbstractTaskList {
      * @param to конец интервала времени
      * @return массив задач
      */
-    Task[] incoming(int from, int to) {
+    @Override
+    public Task[] incoming(int from, int to) {
         Element current = head;
         int counter = 0;
 
         while (current != null) {
-            if(((Task) current.getData()).getTime() > from &&
-                    ((Task) current.getData()).getTime() <= to) {
-                counter++;
+            if(current.getData().isActive()) {
+                if(current.getData().getTime() > from &&
+                        current.getData().getTime() <= to) {
+                    counter++;
+                }
+                if(current.getData().isRepeated()) {
+                    for(int tm = current.getData().getStartTime(); tm <= current.getData().getEndTime(); tm += current.getData().getRepeatInterval()) {
+                        if(tm > from && tm <= to) {
+                            counter++;
+                            break;
+                        }
+                    }
+                }
             }
             current = current.getNext();
         }
@@ -65,12 +76,26 @@ class LinkedTaskList extends AbstractTaskList {
         Task[] arr = new Task[counter];
         counter = 0;
         current = head;
+
+
+
+
         while (current != null) {
-            if(((Task) current.getData()).getTime() > from &&
-                    ((Task) current.getData()).getTime() <= to) {
-                //list.add((Task) current.getData());
-                arr[counter] = (Task) current.getData();
-                counter++;
+            if(current.getData().isActive()) {
+                if(current.getData().getTime() > from &&
+                        current.getData().getTime() <= to) {
+                    arr[counter] = current.getData();
+                    counter++;
+                }
+                if(current.getData().isRepeated()) {
+                    for(int tm = current.getData().getStartTime(); tm <= current.getData().getEndTime(); tm += current.getData().getRepeatInterval()) {
+                        if(tm > from && tm <= to) {
+                            arr[counter] = current.getData();
+                            counter++;
+                            break;
+                        }
+                    }
+                }
             }
             current = current.getNext();
         }
@@ -80,34 +105,32 @@ class LinkedTaskList extends AbstractTaskList {
 
     @Override
     public void add(Task task) {
-        if(task == null || Objects.equals(task.getTitle(), "")) return;
+        if(task == null || task.getTitle().equals("")) return;
 
-        task.setTitle(taskListTitle + task.getTitle());
-        if(head == null) {
+        if(!task.getTitle().startsWith(AbstractTaskList.taskListTitle))
+            task.setTitle(AbstractTaskList.taskListTitle + task.getTitle());
+
+        if(head == null)
             head = new Element(task);
-        }
-        else
-        {
-            Element tmp = new Element(task);
+        else {
             Element current = head;
-            if (current != null) {
-                while (current.getNext() != null) {
-                    current = current.getNext();
-                }
-                current.setNext(tmp);
+            while (current.getNext() != null) {
+                current = current.getNext();
             }
+            current.setNext(new Element(task));
         }
         itemsCount++;
     }
 
+    //todo remake remove method
     @Override
     public void remove(Task task) {
-        if(task == null || Objects.equals(task.getTitle(), "")) return;
+        if(task == null || task.getTitle().equals("")) return;
 
         boolean deleted = true;
         while(deleted) {
             deleted = false;
-            if(Objects.equals(((Task) head.getData()).getTitle(), task.getTitle())) {
+            if(Objects.equals(head.getData().getTitle(), task.getTitle())) {
                 head = head.getNext();
                 itemsCount--;
                 deleted = true;
@@ -120,7 +143,7 @@ class LinkedTaskList extends AbstractTaskList {
         for (int i = 0; i < itemsCount; i++) {
             if(current.getNext() == null) break;
 
-            if(Objects.equals(((Task) current.next.getData()).getTitle(), task.getTitle())) {
+            if(Objects.equals(current.next.getData().getTitle(), task.getTitle())) {
                 current.setNext(current.getNext().getNext());
                 itemsCount--;
             }
@@ -130,38 +153,33 @@ class LinkedTaskList extends AbstractTaskList {
 
     }
 
+    //todo remake getTask method
     @Override
     public Task getTask(int index) {
-        if (index < 0 || index >= itemsCount)
+        if (index < 0 || index >= itemsCount || head == null)
             return null;
 
         if(index == 0)
-            return (Task) head.getData();
+            return head.getData();
 
-        Element current = null;
+        Element current = head;
+        for (int i = 0; i < index; i++) {
+            if (current.getNext() == null)
+                return null;
 
-        if (head != null) {
-            current = head.getNext();
-            for (int i = 0; i < index; i++) {
-                if (current.getNext() == null)
-                    return null;
-
-                current = current.getNext();
-            }
-            return (Task) current.getData();
+            current = current.getNext();
         }
-        return null;
+        return current.getData();
     }
 
+    @Override
     public String toString() {
         String output = "";
         Element current = head;
-
         while (current != null) {
             output += "[" + current.getData().toString() + "]";
             current = current.getNext();
         }
-
         return output;
     }
 }

@@ -1,6 +1,8 @@
 package ua.edu.sumdu.ta.shestak.maksym.pr4;
 
 import ua.edu.sumdu.ta.shestak.maksym.pr2.Task;
+import ua.edu.sumdu.ta.shestak.maksym.pr3.AbstractTaskList;
+import ua.edu.sumdu.ta.shestak.maksym.pr3.ArrayTaskList;
 
 /**
  * @author Maksym Shestak
@@ -11,7 +13,8 @@ public class Main {
 
         LinkedTaskList list = new LinkedTaskList();
 
-        Task t1 = new Task("t1", 1);
+        /*
+        Task t1 = new Task("[EDUCTR][TA]t1", 1);
         Task t2 = new Task("t2", 2);
         Task t3 = new Task("t3", 3);
         Task t4 = new Task("t4", 4);
@@ -24,14 +27,22 @@ public class Main {
         list.add(t4);
         list.add(t5);
         list.add(t6);
-
+*/
         //System.out.println(list.getTask(5).getTitle());
-        list.remove(t6);
+        //list.remove(t6);
 
-        System.out.println(list.toString());
+        //System.out.println(list.toString());
         //System.out.println(list.size());
 
         //list.remove(t1);
         //System.out.println(list.getTask(0).getTitle());
+
+        AbstractTaskList tasks = new ArrayTaskList();
+        Task[] ts = {new Task("a",0), new Task("b",1), new Task("c",2)};
+        for (Task t : ts) {
+            t.setActive(false);
+            tasks.add(t);
+        }
+        System.out.println(tasks.incoming(0, 1000).length);
     }
 }

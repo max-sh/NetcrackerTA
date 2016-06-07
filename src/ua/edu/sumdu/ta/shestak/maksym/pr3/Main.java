@@ -22,12 +22,15 @@ public class Main {
         arrayTaskList.add(t3);
         arrayTaskList.add(t4);
         arrayTaskList.add(t5);
-
         arrayTaskList.add(t6);
 
+        arrayTaskList.remove(t1);
+
+        System.out.println(arrayTaskList);
         //arrayTaskList.print();
         //arrayTaskList.remove(t2);
         //arrayTaskList.print();
 
     }
+
 }
