@@ -47,27 +47,6 @@ public class ArrayTaskList extends AbstractTaskList {
         itemsCount++;
     }
 
-    //todo remake remove method
-    public void removeOLD(Task task) {
-        if(task == null || task.getTitle().equals("")) return;
-
-        Task tmp[] = new Task[taskArrayList.length];
-        boolean deleted = true;
-        while(deleted) {
-            deleted = false;
-            for(int i = 0; i < itemsCount; i++) {
-                if(taskArrayList[i].getTitle().equals(task.getTitle())) {
-                    System.arraycopy(taskArrayList, 0, tmp, 0, i);
-                    System.arraycopy(taskArrayList, i + 1, tmp, i, itemsCount - i - 1);
-                    itemsCount--;
-                    System.arraycopy(tmp, 0, taskArrayList, 0, itemsCount);
-                    deleted = true;
-                    break;
-                }
-            }
-        }
-        taskArrayList = tmp;
-    }
     @Override
     public void remove(Task task) {
         if(task == null || task.getTitle().equals("")) return;
@@ -104,53 +83,6 @@ public class ArrayTaskList extends AbstractTaskList {
         if(index >= 0 && index < itemsCount)
             return taskArrayList[index];
         return null;
-    }
-
-
-    //todo make array incoming
-    //@Override
-    public Task[] incomingOLD(int from, int to) {
-
-        int s = 0;
-        for(int i = 0; i < itemsCount; i++) {
-            if(taskArrayList[i].isRepeated() && taskArrayList[i].isActive()) {
-                for(int tm = taskArrayList[i].getStartTime(); tm <= taskArrayList[i].getEndTime(); tm += taskArrayList[i].getRepeatInterval()) {
-                    if(tm > from && tm <= to) {
-                        s++;
-                        break;
-                    }
-                }
-            }
-            else if(taskArrayList[i].isActive()) {
-                if(taskArrayList[i].getTime() > from && taskArrayList[i].getTime() <= to) {
-                    s++;
-                }
-            }
-        }
-
-        if(s == 0) return new Task[0];
-
-        Task[] res = new Task[s];
-        s = 0;
-        for(int i = 0; i < itemsCount; i++) {
-            if(taskArrayList[i].isRepeated() && taskArrayList[i].isActive()) {
-                for(int tm = taskArrayList[i].getStartTime(); tm <= taskArrayList[i].getEndTime(); tm += taskArrayList[i].getRepeatInterval()) {
-                    if(tm > from && tm <= to) {
-                        res[s] = taskArrayList[i];
-                        s++;
-                        break;
-                    }
-                }
-            }
-            else if(taskArrayList[i].isActive()) {
-                if(taskArrayList[i].getTime() > from && taskArrayList[i].getTime() <= to) {
-                    res[s] = taskArrayList[i];
-                    s++;
-                }
-            }
-        }
-
-        return res;
     }
 
     @Override
