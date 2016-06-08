@@ -1,4 +1,4 @@
-package ua.edu.sumdu.ta.shestak.maksym.pr2;
+package ua.edu.sumdu.ta.shestak.maksym.pr5;
 
 /**
  * @author <a href="mailto:slvr.max@gmail.com">Maksym Shestak</a>
@@ -60,7 +60,7 @@ public class Task {
      */
     public void setTitle(String title) {
         if(title.equals("") || title == null) {
-            System.out.println("Title can`t be empty");
+            throw new RuntimeException();
         }
         this.title = title;
     }
@@ -96,8 +96,7 @@ public class Task {
      */
     public void setTime(int time) {
         if(time < 0) {
-            System.out.println("Time must be >0");
-            return;
+            throw new RuntimeException();
         }
 
         this.time = time;
@@ -115,7 +114,7 @@ public class Task {
     public void setTime(int start, int end, int repeat) {
         if(start < 0 || end < 0 || repeat < 0 || start > end) {
             System.out.println("incorrect input");
-            return;
+            throw new RuntimeException();
         }
         this.time = start;
         this.startTime = start;
@@ -177,10 +176,11 @@ public class Task {
      * @return time of next notification
      */
     public int nextTimeAfter(int time) {
-
         int nextTime = -1;
 
-        if(active && time >= 0) {
+        if(time < 0)
+            throw new RuntimeException();
+        else if(active) {
 
             // for no-repeat task
             if(repeatTime == 0) {

@@ -1,10 +1,4 @@
-package ua.edu.sumdu.ta.shestak.maksym.pr4;
-
-import ua.edu.sumdu.ta.shestak.maksym.pr2.Task;
-import ua.edu.sumdu.ta.shestak.maksym.pr3.AbstractTaskList;
-
-import java.util.ArrayList;
-import java.util.Objects;
+package ua.edu.sumdu.ta.shestak.maksym.pr5;
 
 /**
  * @author Maksym Shestak
@@ -45,16 +39,13 @@ public class LinkedTaskList extends AbstractTaskList {
     }
 
     @Override
+    // TODO: 08.06.2016 incoming linked
     public Task[] incoming(int from, int to) {
         Element current = head;
         int counter = 0;
 
         while (current != null) {
             if(current.getData().isActive()) {
-                if(current.getData().getTime() > from &&
-                        current.getData().getTime() <= to) {
-                    counter++;
-                }
                 if(current.getData().isRepeated()) {
                     for(int tm = current.getData().getStartTime(); tm <= current.getData().getEndTime(); tm += current.getData().getRepeatInterval()) {
                         if(tm > from && tm <= to) {
@@ -63,9 +54,14 @@ public class LinkedTaskList extends AbstractTaskList {
                         }
                     }
                 }
+                else if(current.getData().getTime() > from &&
+                        current.getData().getTime() <= to) {
+                    counter++;
+                }
             }
             current = current.getNext();
         }
+        System.out.println(counter);
 
         Task[] arr = new Task[counter];
         counter = 0;
@@ -73,14 +69,8 @@ public class LinkedTaskList extends AbstractTaskList {
 
 
 
-
         while (current != null) {
             if(current.getData().isActive()) {
-                if(current.getData().getTime() > from &&
-                        current.getData().getTime() <= to) {
-                    arr[counter] = current.getData();
-                    counter++;
-                }
                 if(current.getData().isRepeated()) {
                     for(int tm = current.getData().getStartTime(); tm <= current.getData().getEndTime(); tm += current.getData().getRepeatInterval()) {
                         if(tm > from && tm <= to) {
@@ -89,6 +79,11 @@ public class LinkedTaskList extends AbstractTaskList {
                             break;
                         }
                     }
+                }
+                else if(current.getData().getTime() > from &&
+                        current.getData().getTime() <= to) {
+                    arr[counter] = current.getData();
+                    counter++;
                 }
             }
             current = current.getNext();
@@ -99,7 +94,7 @@ public class LinkedTaskList extends AbstractTaskList {
 
     @Override
     public void add(Task task) {
-        if(task == null || task.getTitle().equals("")) return;
+        if(task == null || task.getTitle().equals("")) throw new RuntimeException();
 
         if(!task.getTitle().startsWith(AbstractTaskList.taskListTitle))
             task.setTitle(AbstractTaskList.taskListTitle + task.getTitle());
@@ -118,7 +113,7 @@ public class LinkedTaskList extends AbstractTaskList {
 
     @Override
     public void remove(Task task) {
-        if(task == null || task.getTitle().equals("")) return;
+        if(task == null || task.getTitle().equals("")) throw new RuntimeException();
 
         while(head.getData().getTitle().equals(task.getTitle())) {
             head = head.getNext();
@@ -131,14 +126,15 @@ public class LinkedTaskList extends AbstractTaskList {
                 current.setNext(current.getNext().getNext());
                 itemsCount--;
             }
-            current = current.getNext();
+            if(current.getNext() != null)
+                current = current.getNext();
         }
     }
 
     @Override
     public Task getTask(int index) {
         if (index < 0 || index >= itemsCount || head == null)
-            return null;
+            throw new RuntimeException();
 
         if(index == 0)
             return head.getData();
