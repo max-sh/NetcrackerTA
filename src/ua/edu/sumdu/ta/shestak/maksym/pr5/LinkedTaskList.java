@@ -39,57 +39,37 @@ public class LinkedTaskList extends AbstractTaskList {
     }
 
     @Override
-    // TODO: 08.06.2016 incoming linked
+
     public Task[] incoming(int from, int to) {
         Element current = head;
-        int counter = 0;
+        int incomingElements = 0;
+        Task[] tmp = new Task[itemsCount];
 
         while (current != null) {
             if(current.getData().isActive()) {
                 if(current.getData().isRepeated()) {
                     for(int tm = current.getData().getStartTime(); tm <= current.getData().getEndTime(); tm += current.getData().getRepeatInterval()) {
                         if(tm > from && tm <= to) {
-                            counter++;
+                            tmp[incomingElements] = current.getData();
+                            incomingElements++;
                             break;
                         }
                     }
                 }
                 else if(current.getData().getTime() > from &&
                         current.getData().getTime() <= to) {
-                    counter++;
+                    tmp[incomingElements] = current.getData();
+                    incomingElements++;
                 }
             }
             current = current.getNext();
         }
-        System.out.println(counter);
+        System.out.println(incomingElements);
 
-        Task[] arr = new Task[counter];
-        counter = 0;
-        current = head;
+        Task[] incomingArray = new Task[incomingElements];
+        System.arraycopy(tmp, 0, incomingArray, 0, incomingElements);
 
-
-
-        while (current != null) {
-            if(current.getData().isActive()) {
-                if(current.getData().isRepeated()) {
-                    for(int tm = current.getData().getStartTime(); tm <= current.getData().getEndTime(); tm += current.getData().getRepeatInterval()) {
-                        if(tm > from && tm <= to) {
-                            arr[counter] = current.getData();
-                            counter++;
-                            break;
-                        }
-                    }
-                }
-                else if(current.getData().getTime() > from &&
-                        current.getData().getTime() <= to) {
-                    arr[counter] = current.getData();
-                    counter++;
-                }
-            }
-            current = current.getNext();
-        }
-
-        return arr;
+        return incomingArray;
     }
 
     @Override

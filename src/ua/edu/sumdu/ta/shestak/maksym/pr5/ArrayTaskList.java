@@ -83,7 +83,6 @@ public class ArrayTaskList extends AbstractTaskList {
     }
 
     @Override
-    //todo incoming array
     public Task[] incoming(int from, int to) {
 
         int incomingElements = 0;
@@ -99,11 +98,9 @@ public class ArrayTaskList extends AbstractTaskList {
                         }
                     }
                 }
-                else {
-                    if(taskArrayList[i].getTime() > from && taskArrayList[i].getTime() <= to) {
-                        incomingArray[incomingElements] = taskArrayList[i];
-                        incomingElements++;
-                    }
+                else if(taskArrayList[i].getTime() > from && taskArrayList[i].getTime() <= to) {
+                    incomingArray[incomingElements] = taskArrayList[i];
+                    incomingElements++;
                 }
             }
         }

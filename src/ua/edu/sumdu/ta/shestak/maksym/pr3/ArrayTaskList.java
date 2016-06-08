@@ -8,6 +8,7 @@ import java.util.Objects;
  * @author Maksym Shestak
  * @since 03.06.2016
  */
+@SuppressWarnings("Duplicates")
 public class ArrayTaskList extends AbstractTaskList {
 
     private static int arrayTaskListCount = 0;
@@ -101,11 +102,9 @@ public class ArrayTaskList extends AbstractTaskList {
                         }
                     }
                 }
-                else {
-                    if(taskArrayList[i].getTime() > from && taskArrayList[i].getTime() <= to) {
-                        incomingArray[incomingElements] = taskArrayList[i];
-                        incomingElements++;
-                    }
+                else if(taskArrayList[i].getTime() > from && taskArrayList[i].getTime() <= to) {
+                    incomingArray[incomingElements] = taskArrayList[i];
+                    incomingElements++;
                 }
             }
         }

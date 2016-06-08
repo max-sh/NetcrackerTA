@@ -47,54 +47,34 @@ public class LinkedTaskList extends AbstractTaskList {
     @Override
     public Task[] incoming(int from, int to) {
         Element current = head;
-        int counter = 0;
+        int incomingElements = 0;
+        Task[] tmp = new Task[itemsCount];
 
         while (current != null) {
             if(current.getData().isActive()) {
-                if(current.getData().getTime() > from &&
-                        current.getData().getTime() <= to) {
-                    counter++;
-                }
                 if(current.getData().isRepeated()) {
                     for(int tm = current.getData().getStartTime(); tm <= current.getData().getEndTime(); tm += current.getData().getRepeatInterval()) {
                         if(tm > from && tm <= to) {
-                            counter++;
+                            tmp[incomingElements] = current.getData();
+                            incomingElements++;
                             break;
                         }
                     }
                 }
-            }
-            current = current.getNext();
-        }
-
-        Task[] arr = new Task[counter];
-        counter = 0;
-        current = head;
-
-
-
-
-        while (current != null) {
-            if(current.getData().isActive()) {
-                if(current.getData().getTime() > from &&
+                else if(current.getData().getTime() > from &&
                         current.getData().getTime() <= to) {
-                    arr[counter] = current.getData();
-                    counter++;
-                }
-                if(current.getData().isRepeated()) {
-                    for(int tm = current.getData().getStartTime(); tm <= current.getData().getEndTime(); tm += current.getData().getRepeatInterval()) {
-                        if(tm > from && tm <= to) {
-                            arr[counter] = current.getData();
-                            counter++;
-                            break;
-                        }
-                    }
+                    tmp[incomingElements] = current.getData();
+                    incomingElements++;
                 }
             }
             current = current.getNext();
         }
+        System.out.println(incomingElements);
 
-        return arr;
+        Task[] incomingArray = new Task[incomingElements];
+        System.arraycopy(tmp, 0, incomingArray, 0, incomingElements);
+
+        return incomingArray;
     }
 
     @Override
