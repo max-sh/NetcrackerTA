@@ -12,8 +12,8 @@ import java.util.Objects;
  */
 class LinkedTaskList extends AbstractTaskList {
     private class Element {
-        Task data;
-        Element next;
+        private Task data;
+        private Element next;
 
         public Element(Task data) {
             next = null;
@@ -40,16 +40,10 @@ class LinkedTaskList extends AbstractTaskList {
     private Element head;
     private static int linkedTaskListCount = 0;
     public LinkedTaskList() {
+        super();
         linkedTaskListCount++;
     }
 
-    /**
-     * Функция для получения массива задач, время которых находится между
-     * from (исключительно) и to (включительно).
-     * @param from начало интервала времени
-     * @param to конец интервала времени
-     * @return массив задач
-     */
     @Override
     public Task[] incoming(int from, int to) {
         Element current = head;
@@ -122,38 +116,25 @@ class LinkedTaskList extends AbstractTaskList {
         itemsCount++;
     }
 
-    //todo remake remove method
     @Override
     public void remove(Task task) {
         if(task == null || task.getTitle().equals("")) return;
 
-        boolean deleted = true;
-        while(deleted) {
-            deleted = false;
-            if(Objects.equals(head.getData().getTitle(), task.getTitle())) {
-                head = head.getNext();
-                itemsCount--;
-                deleted = true;
-            }
+        while(head.getData().getTitle().equals(task.getTitle())) {
+            head = head.getNext();
+            itemsCount--;
         }
 
-
-
         Element current = head;
-        for (int i = 0; i < itemsCount; i++) {
-            if(current.getNext() == null) break;
-
-            if(Objects.equals(current.next.getData().getTitle(), task.getTitle())) {
+        while(current.getNext() != null) {
+            if(current.getNext().getData().getTitle().equals(task.getTitle())) {
                 current.setNext(current.getNext().getNext());
                 itemsCount--;
             }
-
             current = current.getNext();
         }
-
     }
 
-    //todo remake getTask method
     @Override
     public Task getTask(int index) {
         if (index < 0 || index >= itemsCount || head == null)
@@ -164,9 +145,6 @@ class LinkedTaskList extends AbstractTaskList {
 
         Element current = head;
         for (int i = 0; i < index; i++) {
-            if (current.getNext() == null)
-                return null;
-
             current = current.getNext();
         }
         return current.getData();

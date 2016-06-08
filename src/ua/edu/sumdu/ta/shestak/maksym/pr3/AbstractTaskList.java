@@ -40,5 +40,11 @@ public abstract class AbstractTaskList {
         return itemsCount;
     }
 
+    /**
+     * Method for getting array of tasks, which time between 'from' and 'to'(including)
+     * @param from start time
+     * @param to end time
+     * @return task array
+     */
     public abstract Task[] incoming(int from, int to);
 }
