@@ -92,21 +92,8 @@ public class ArrayTaskList extends AbstractTaskList {
         int incomingElements = 0;
         Task[] incomingArray = new Task[itemsCount];
         for(int i = 0; i < itemsCount; i++) {
-            if(taskArrayList[i].isActive()) {
-                if(taskArrayList[i].isRepeated()) {
-                    for(int tm = taskArrayList[i].getStartTime(); tm <= taskArrayList[i].getEndTime(); tm += taskArrayList[i].getRepeatInterval()) {
-                        if(tm > from && tm <= to) {
-                            incomingArray[incomingElements] = taskArrayList[i];
-                            incomingElements++;
-                            break;
-                        }
-                    }
-                }
-                else if(taskArrayList[i].getTime() > from && taskArrayList[i].getTime() <= to) {
-                    incomingArray[incomingElements] = taskArrayList[i];
-                    incomingElements++;
-                }
-            }
+            if(taskArrayList[i].nextTimeAfter(from) > from && taskArrayList[i].nextTimeAfter(from) <= to)
+                incomingArray[incomingElements++] = taskArrayList[i];
         }
 
         Task[] tmp = new Task[incomingElements];

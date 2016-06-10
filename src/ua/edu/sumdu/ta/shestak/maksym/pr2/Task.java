@@ -155,8 +155,7 @@ public class Task {
      * @return repeat status
      */
     public boolean isRepeated() {
-        if(repeatTime > 0)  return true;
-        else                return false;
+        return repeatTime > 0;
     }
 
     /**
@@ -165,8 +164,8 @@ public class Task {
      */
     @Override
     public String toString() {
-        if(!active)             return "Task \"" + title + "\"" + " is inactive";
-        else if(repeatTime == 0)    return "Task \"" + title + "\"" + " at " + time;
+        if(!isActive())             return "Task \"" + title + "\"" + " is inactive";
+        else if(!isRepeated())    return "Task \"" + title + "\"" + " at " + time;
         else                    return "Task \"" + title + "\"" + " from " + startTime +
                                         " to " + endTime + " every " + repeatTime + " seconds";
     }
@@ -180,21 +179,31 @@ public class Task {
 
         int nextTime = -1;
 
-        if(active && time >= 0) {
+        if(isActive() && time >= 0) {
 
             // for no-repeat task
-            if(repeatTime == 0) {
+            if(!isRepeated()) {
                 if(time < this.time) nextTime = this.time;
             }
             //for repeated task
             else {
                 if(time < startTime) nextTime = startTime;
-                else
+                else {
+                    /*
                     for(int currentTime = startTime; currentTime <= endTime; currentTime += repeatTime)
                         if(currentTime > time) {
                             nextTime = currentTime;
                             break;
                         }
+*/
+                    // TODO: 08.06.2016 remake
+                    nextTime = startTime;
+                    while(nextTime <= endTime && nextTime <= time) {
+                        nextTime += repeatTime;
+                    }
+                    if(nextTime > endTime) nextTime = -1;
+                }
+
             }
         }
         return nextTime;
