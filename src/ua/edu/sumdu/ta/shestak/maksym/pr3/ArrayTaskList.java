@@ -52,26 +52,10 @@ public class ArrayTaskList extends AbstractTaskList {
     public void remove(Task task) {
         if(task == null || task.getTitle().equals("")) return;
 
-        int newSize = itemsCount;
-        for(int i = 0; i < itemsCount; i++) {
-            if(taskArrayList[i].getTitle().equals(task.getTitle())) {
-                taskArrayList[i] = null;
-                newSize--;
-            }
-        }
-
-        for(int i = 0; i < itemsCount; i++) {
-            if(taskArrayList[i] == null) {
-                for(int j = i + 1; j < itemsCount; j++) {
-                    if(taskArrayList[j] != null) {
-                        taskArrayList[i] = taskArrayList[j];
-                        taskArrayList[j] = null;
-                        break;
-                    }
-                }
-            }
-        }
-
+        int newSize = 0;
+        for(int i = 0; i < itemsCount; i++)
+            if(!taskArrayList[i].equals(task))
+                taskArrayList[newSize++] = taskArrayList[i];
 
         Task[] tmp = new Task[newSize];
         System.arraycopy(taskArrayList, 0, tmp, 0, newSize);

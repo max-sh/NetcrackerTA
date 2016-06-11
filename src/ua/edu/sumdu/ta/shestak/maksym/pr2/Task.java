@@ -188,20 +188,11 @@ public class Task {
             //for repeated task
             else {
                 if(time < startTime) nextTime = startTime;
-                else {
-                    /*
-                    for(int currentTime = startTime; currentTime <= endTime; currentTime += repeatTime)
-                        if(currentTime > time) {
-                            nextTime = currentTime;
-                            break;
-                        }
-*/
-                    // TODO: 08.06.2016 remake
+                else if(time >= startTime && time + repeatTime < endTime) {
                     nextTime = startTime;
-                    while(nextTime <= endTime && nextTime <= time) {
+                    while(nextTime <= time) {
                         nextTime += repeatTime;
                     }
-                    if(nextTime > endTime) nextTime = -1;
                 }
 
             }
@@ -209,4 +200,14 @@ public class Task {
         return nextTime;
     }
 
+
+    public boolean equals(Task task) {
+        return  task != null &&
+                getTitle().equals(task.getTitle()) &&
+                getTime() == task.getTime() &&
+                isActive() == task.isActive() &&
+                isRepeated() == task.isRepeated() &&
+                getStartTime() == task.getStartTime() &&
+                getEndTime() == task.getEndTime();
+    }
 }

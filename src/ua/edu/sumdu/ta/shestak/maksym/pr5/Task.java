@@ -154,8 +154,7 @@ public class Task {
      * @return repeat status
      */
     public boolean isRepeated() {
-        if(repeatTime > 0)  return true;
-        else                return false;
+        return repeatTime > 0;
     }
 
     /**
