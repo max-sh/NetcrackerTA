@@ -188,13 +188,13 @@ public class Task {
             //for repeated task
             else {
                 if(time < startTime) nextTime = startTime;
-                else if(time >= startTime && time + repeatTime < endTime) {
+                else {
                     nextTime = startTime;
                     while(nextTime <= time) {
                         nextTime += repeatTime;
                     }
+                    if(nextTime > endTime) nextTime = -1;
                 }
-
             }
         }
         return nextTime;

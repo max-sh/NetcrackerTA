@@ -91,7 +91,7 @@ public class ArrayTaskList extends AbstractTaskList {
         String res = "";
 
         for(int i = 0; i < itemsCount; i++) {
-            res += taskArrayList[i] + "\n";
+            res += "[" + taskArrayList[i] +"]" + "\n";
         }
 
         return res;

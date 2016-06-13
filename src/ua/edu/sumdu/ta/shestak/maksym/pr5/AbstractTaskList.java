@@ -1,6 +1,5 @@
 package ua.edu.sumdu.ta.shestak.maksym.pr5;
 
-
 /**
  * @author Maksym Shestak
  * @since 03.06.2016

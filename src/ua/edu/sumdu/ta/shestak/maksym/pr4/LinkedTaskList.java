@@ -106,7 +106,7 @@ public class LinkedTaskList extends AbstractTaskList {
         }
 
         Element current = head;
-        while(current.getNext() != null) {
+        while(current != null && current.getNext() != null) {
             if(current.getNext().getData().getTitle().equals(task.getTitle())) {
                 current.setNext(current.getNext().getNext());
                 itemsCount--;
@@ -135,7 +135,7 @@ public class LinkedTaskList extends AbstractTaskList {
         String output = "";
         Element current = head;
         while (current != null) {
-            output += "[" + current.getData().toString() + "]";
+            output += "[" + current.getData().toString() + "]" + "\n";
             current = current.getNext();
         }
         return output;

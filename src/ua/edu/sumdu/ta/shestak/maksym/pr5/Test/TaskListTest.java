@@ -5,6 +5,7 @@ import org.junit.Test;
 import ua.edu.sumdu.ta.shestak.maksym.pr5.Task;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -161,7 +162,7 @@ public abstract class TaskListTest {
         for (Task t : ts)
             if (t.getTitle().contains("IN"))
                 incoming.add(t);
-        
+
         assertContains(incoming.toArray(new Task[0]), tasks.incoming(50, 60));
     }
 }

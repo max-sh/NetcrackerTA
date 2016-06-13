@@ -1,10 +1,10 @@
 package ua.edu.sumdu.ta.shestak.maksym.pr5;
 
-
 /**
  * @author Maksym Shestak
  * @since 03.06.2016
  */
+@SuppressWarnings("Duplicates")
 public class ArrayTaskList extends AbstractTaskList {
 
     private static int arrayTaskListCount = 0;
@@ -27,7 +27,8 @@ public class ArrayTaskList extends AbstractTaskList {
 
     @Override
     public void add(Task task) {
-        if(task == null || task.getTitle().equals("")) throw new RuntimeException();
+        if(task == null || task.getTitle().equals(""))
+            throw new RuntimeException();
 
         if(!task.getTitle().startsWith(AbstractTaskList.taskListTitle))
             task.setTitle(AbstractTaskList.taskListTitle + task.getTitle());
@@ -46,28 +47,13 @@ public class ArrayTaskList extends AbstractTaskList {
 
     @Override
     public void remove(Task task) {
-        if(task == null || task.getTitle().equals("")) throw new RuntimeException();
+        if(task == null || task.getTitle().equals(""))
+            throw new RuntimeException();
 
-        int newSize = itemsCount;
-        for(int i = 0; i < itemsCount; i++) {
-            if(taskArrayList[i].getTitle().equals(task.getTitle())) {
-                taskArrayList[i] = null;
-                newSize--;
-            }
-        }
-
-        for(int i = 0; i < itemsCount; i++) {
-            if(taskArrayList[i] == null) {
-                for(int j = i + 1; j < itemsCount; j++) {
-                    if(taskArrayList[j] != null) {
-                        taskArrayList[i] = taskArrayList[j];
-                        taskArrayList[j] = null;
-                        break;
-                    }
-                }
-            }
-        }
-
+        int newSize = 0;
+        for(int i = 0; i < itemsCount; i++)
+            if(!taskArrayList[i].equals(task))
+                taskArrayList[newSize++] = taskArrayList[i];
 
         Task[] tmp = new Task[newSize];
         System.arraycopy(taskArrayList, 0, tmp, 0, newSize);
@@ -88,21 +74,8 @@ public class ArrayTaskList extends AbstractTaskList {
         int incomingElements = 0;
         Task[] incomingArray = new Task[itemsCount];
         for(int i = 0; i < itemsCount; i++) {
-            if(taskArrayList[i].isActive()) {
-                if(taskArrayList[i].isRepeated()) {
-                    for(int tm = taskArrayList[i].getStartTime(); tm <= taskArrayList[i].getEndTime(); tm += taskArrayList[i].getRepeatInterval()) {
-                        if(tm > from && tm <= to) {
-                            incomingArray[incomingElements] = taskArrayList[i];
-                            incomingElements++;
-                            break;
-                        }
-                    }
-                }
-                else if(taskArrayList[i].getTime() > from && taskArrayList[i].getTime() <= to) {
-                    incomingArray[incomingElements] = taskArrayList[i];
-                    incomingElements++;
-                }
-            }
+            if(taskArrayList[i].nextTimeAfter(from) > from && taskArrayList[i].nextTimeAfter(from) <= to)
+                incomingArray[incomingElements++] = taskArrayList[i];
         }
 
         Task[] tmp = new Task[incomingElements];
@@ -116,7 +89,7 @@ public class ArrayTaskList extends AbstractTaskList {
         String res = "";
 
         for(int i = 0; i < itemsCount; i++) {
-            res += taskArrayList[i] + "\n";
+            res += "[" + taskArrayList[i] +"]" + "\n";
         }
 
         return res;

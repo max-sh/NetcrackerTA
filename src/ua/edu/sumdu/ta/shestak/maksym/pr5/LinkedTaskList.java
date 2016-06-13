@@ -39,7 +39,6 @@ public class LinkedTaskList extends AbstractTaskList {
     }
 
     @Override
-
     public Task[] incoming(int from, int to) {
         Element current = head;
         int incomingElements = 0;
@@ -74,7 +73,8 @@ public class LinkedTaskList extends AbstractTaskList {
 
     @Override
     public void add(Task task) {
-        if(task == null || task.getTitle().equals("")) throw new RuntimeException();
+        if(task == null || task.getTitle().equals(""))
+            throw new RuntimeException();
 
         if(!task.getTitle().startsWith(AbstractTaskList.taskListTitle))
             task.setTitle(AbstractTaskList.taskListTitle + task.getTitle());
@@ -93,7 +93,8 @@ public class LinkedTaskList extends AbstractTaskList {
 
     @Override
     public void remove(Task task) {
-        if(task == null || task.getTitle().equals("")) throw new RuntimeException();
+        if(task == null || task.getTitle().equals(""))
+            throw new RuntimeException();
 
         while(head.getData().getTitle().equals(task.getTitle())) {
             head = head.getNext();
@@ -101,13 +102,12 @@ public class LinkedTaskList extends AbstractTaskList {
         }
 
         Element current = head;
-        while(current.getNext() != null) {
+        while(current != null && current.getNext() != null) {
             if(current.getNext().getData().getTitle().equals(task.getTitle())) {
                 current.setNext(current.getNext().getNext());
                 itemsCount--;
             }
-            if(current.getNext() != null)
-                current = current.getNext();
+            current = current.getNext();
         }
     }
 
@@ -131,7 +131,7 @@ public class LinkedTaskList extends AbstractTaskList {
         String output = "";
         Element current = head;
         while (current != null) {
-            output += "[" + current.getData().toString() + "]";
+            output += "[" + current.getData().toString() + "]" + "\n";
             current = current.getNext();
         }
         return output;

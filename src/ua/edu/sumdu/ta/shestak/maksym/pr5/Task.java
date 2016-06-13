@@ -59,9 +59,7 @@ public class Task {
      * @param title task title
      */
     public void setTitle(String title) {
-        if(title.equals("") || title == null) {
-            throw new RuntimeException();
-        }
+        if(title.equals("") || title == null) throw new RuntimeException();
         this.title = title;
     }
 
@@ -95,9 +93,8 @@ public class Task {
      * @param time time notifications about the task
      */
     public void setTime(int time) {
-        if(time < 0) {
+        if(time < 0)
             throw new RuntimeException();
-        }
 
         this.time = time;
         this.startTime = time;
@@ -112,10 +109,8 @@ public class Task {
      * @param repeat the time interval at which you need to repeat notification
      */
     public void setTime(int start, int end, int repeat) {
-        if(start < 0 || end < 0 || repeat < 0 || start > end) {
-            System.out.println("incorrect input");
+        if(start < 0 || end < 0 || repeat < 0 || start > end)
             throw new RuntimeException();
-        }
         this.time = start;
         this.startTime = start;
         this.endTime = end;
@@ -163,10 +158,10 @@ public class Task {
      */
     @Override
     public String toString() {
-        if(!active)             return "Task \"" + title + "\"" + " is inactive";
-        else if(repeatTime == 0)    return "Task \"" + title + "\"" + " at " + time;
+        if(!isActive())             return "Task \"" + title + "\"" + " is inactive";
+        else if(!isRepeated())    return "Task \"" + title + "\"" + " at " + time;
         else                    return "Task \"" + title + "\"" + " from " + startTime +
-                                        " to " + endTime + " every " + repeatTime + " seconds";
+                    " to " + endTime + " every " + repeatTime + " seconds";
     }
 
     /**
@@ -175,28 +170,41 @@ public class Task {
      * @return time of next notification
      */
     public int nextTimeAfter(int time) {
-        int nextTime = -1;
-
         if(time < 0)
             throw new RuntimeException();
-        else if(active) {
+
+        int nextTime = -1;
+
+        if(isActive()) {
 
             // for no-repeat task
-            if(repeatTime == 0) {
+            if(!isRepeated()) {
                 if(time < this.time) nextTime = this.time;
             }
             //for repeated task
             else {
                 if(time < startTime) nextTime = startTime;
-                else
-                    for(int currentTime = startTime; currentTime <= endTime; currentTime += repeatTime)
-                        if(currentTime > time) {
-                            nextTime = currentTime;
-                            break;
-                        }
+                else {
+                    nextTime = startTime;
+                    while(nextTime <= time) {
+                        nextTime += repeatTime;
+                    }
+                    if(nextTime > endTime) nextTime = -1;
+                }
             }
         }
+
         return nextTime;
     }
 
+
+    public boolean equals(Task task) {
+        return  task != null &&
+                getTitle().equals(task.getTitle()) &&
+                getTime() == task.getTime() &&
+                isActive() == task.isActive() &&
+                isRepeated() == task.isRepeated() &&
+                getStartTime() == task.getStartTime() &&
+                getEndTime() == task.getEndTime();
+    }
 }
