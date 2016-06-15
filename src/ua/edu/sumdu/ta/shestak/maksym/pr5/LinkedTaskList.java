@@ -45,22 +45,9 @@ public class LinkedTaskList extends AbstractTaskList {
         Task[] tmp = new Task[itemsCount];
 
         while (current != null) {
-            if(current.getData().isActive()) {
-                if(current.getData().isRepeated()) {
-                    for(int tm = current.getData().getStartTime(); tm <= current.getData().getEndTime(); tm += current.getData().getRepeatInterval()) {
-                        if(tm > from && tm <= to) {
-                            tmp[incomingElements] = current.getData();
-                            incomingElements++;
-                            break;
-                        }
-                    }
-                }
-                else if(current.getData().getTime() > from &&
-                        current.getData().getTime() <= to) {
-                    tmp[incomingElements] = current.getData();
-                    incomingElements++;
-                }
-            }
+            if(current.getData().nextTimeAfter(from) > from && current.getData().nextTimeAfter(from) <= to)
+                tmp[incomingElements++] = current.getData();
+
             current = current.getNext();
         }
         System.out.println(incomingElements);

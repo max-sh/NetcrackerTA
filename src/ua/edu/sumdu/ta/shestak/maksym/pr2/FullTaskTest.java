@@ -1,7 +1,6 @@
 package ua.edu.sumdu.ta.shestak.maksym.pr2;
 
 import org.junit.*;
-import ua.edu.sumdu.ta.shestak.maksym.pr2.Task;
 
 import static org.junit.Assert.*;
 
