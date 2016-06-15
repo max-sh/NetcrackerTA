@@ -10,8 +10,8 @@ public class LinkedTaskList extends AbstractTaskList {
         private Element next;
 
         public Element(Task data) {
-            next = null;
-            this.data = data;
+            setNext(null);
+            setData(data);
         }
 
         public Task getData() {
@@ -59,9 +59,9 @@ public class LinkedTaskList extends AbstractTaskList {
     }
 
     @Override
-    public void add(Task task) {
+    public void add(Task task) throws IllegalArgumentException {
         if(task == null || task.getTitle().equals(""))
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
 
         if(!task.getTitle().startsWith(AbstractTaskList.taskListTitle))
             task.setTitle(AbstractTaskList.taskListTitle + task.getTitle());
@@ -79,9 +79,9 @@ public class LinkedTaskList extends AbstractTaskList {
     }
 
     @Override
-    public void remove(Task task) {
+    public void remove(Task task) throws IllegalArgumentException {
         if(task == null || task.getTitle().equals(""))
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
 
         while(head.getData().getTitle().equals(task.getTitle())) {
             head = head.getNext();
@@ -99,9 +99,9 @@ public class LinkedTaskList extends AbstractTaskList {
     }
 
     @Override
-    public Task getTask(int index) {
+    public Task getTask(int index) throws IndexOutOfBoundsException {
         if (index < 0 || index >= itemsCount || head == null)
-            throw new RuntimeException();
+            throw new IndexOutOfBoundsException();
 
         if(index == 0)
             return head.getData();

@@ -26,9 +26,9 @@ public class ArrayTaskList extends AbstractTaskList {
     }
 
     @Override
-    public void add(Task task) {
+    public void add(Task task) throws IllegalArgumentException {
         if(task == null || task.getTitle().equals(""))
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
 
         if(!task.getTitle().startsWith(AbstractTaskList.taskListTitle))
             task.setTitle(AbstractTaskList.taskListTitle + task.getTitle());
@@ -46,9 +46,9 @@ public class ArrayTaskList extends AbstractTaskList {
     }
 
     @Override
-    public void remove(Task task) {
+    public void remove(Task task) throws IllegalArgumentException {
         if(task == null || task.getTitle().equals(""))
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
 
         int newSize = 0;
         for(int i = 0; i < itemsCount; i++)
@@ -62,10 +62,10 @@ public class ArrayTaskList extends AbstractTaskList {
     }
 
     @Override
-    public Task getTask(int index) {
+    public Task getTask(int index) throws IndexOutOfBoundsException {
         if(index >= 0 && index < itemsCount)
             return taskArrayList[index];
-        else throw new RuntimeException();
+        else throw new IndexOutOfBoundsException();
     }
 
     @Override

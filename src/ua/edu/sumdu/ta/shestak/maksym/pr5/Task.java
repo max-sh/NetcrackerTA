@@ -6,6 +6,8 @@ package ua.edu.sumdu.ta.shestak.maksym.pr5;
  */
 
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 /**
  * The class that describes the type "task" data,
  * which contains information about the essence of the problem,
@@ -58,8 +60,8 @@ public class Task {
      * Method for setting task title
      * @param title task title
      */
-    public void setTitle(String title) {
-        if(title.equals("") || title == null) throw new RuntimeException();
+    public void setTitle(String title) throws IllegalArgumentException {
+        if(title.equals("") || title == null) throw new IllegalArgumentException();
         this.title = title;
     }
 
@@ -92,9 +94,9 @@ public class Task {
      * The method of setting the start time for the one-time task, where time - time notifications about the task
      * @param time time notifications about the task
      */
-    public void setTime(int time) {
+    public void setTime(int time) throws IllegalArgumentException {
         if(time < 0)
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
 
         this.time = time;
         this.startTime = time;
@@ -108,9 +110,9 @@ public class Task {
      * @param end notification end time
      * @param repeat the time interval at which you need to repeat notification
      */
-    public void setTime(int start, int end, int repeat) {
+    public void setTime(int start, int end, int repeat) throws IllegalArgumentException {
         if(start < 0 || end < 0 || repeat < 0 || start > end)
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
         this.time = start;
         this.startTime = start;
         this.endTime = end;
@@ -169,9 +171,9 @@ public class Task {
      * @param time time
      * @return time of next notification
      */
-    public int nextTimeAfter(int time) {
+    public int nextTimeAfter(int time) throws IllegalArgumentException {
         if(time < 0)
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
 
         int nextTime = -1;
 
@@ -198,13 +200,14 @@ public class Task {
     }
 
 
-    public boolean equals(Task task) {
-        return  task != null &&
-                getTitle().equals(task.getTitle()) &&
-                getTime() == task.getTime() &&
-                isActive() == task.isActive() &&
-                isRepeated() == task.isRepeated() &&
-                getStartTime() == task.getStartTime() &&
-                getEndTime() == task.getEndTime();
+    @Override
+    public boolean equals(Object task) {
+        return  !(task instanceof Task) && task != null &&
+                getTitle().equals(((Task) task).getTitle()) &&
+                getTime()       == ((Task) task).getTime() &&
+                isActive()      == ((Task) task).isActive() &&
+                isRepeated()    == ((Task) task).isRepeated() &&
+                getStartTime()  == ((Task) task).getStartTime() &&
+                getEndTime()    == ((Task) task).getEndTime();
     }
 }

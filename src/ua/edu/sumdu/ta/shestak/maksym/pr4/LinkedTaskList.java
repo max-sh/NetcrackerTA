@@ -3,9 +3,6 @@ package ua.edu.sumdu.ta.shestak.maksym.pr4;
 import ua.edu.sumdu.ta.shestak.maksym.pr2.Task;
 import ua.edu.sumdu.ta.shestak.maksym.pr3.AbstractTaskList;
 
-import java.util.ArrayList;
-import java.util.Objects;
-
 /**
  * @author Maksym Shestak
  * @since 03.06.2016
@@ -16,8 +13,8 @@ public class LinkedTaskList extends AbstractTaskList {
         private Element next;
 
         public Element(Task data) {
-            next = null;
-            this.data = data;
+            setNext(null);
+            setData(data);
         }
 
         public Task getData() {
@@ -115,16 +112,5 @@ public class LinkedTaskList extends AbstractTaskList {
             current = current.getNext();
         }
         return current.getData();
-    }
-
-    @Override
-    public String toString() {
-        String output = "";
-        Element current = head;
-        while (current != null) {
-            output += "[" + current.getData().toString() + "]" + "\n";
-            current = current.getNext();
-        }
-        return output;
     }
 }
