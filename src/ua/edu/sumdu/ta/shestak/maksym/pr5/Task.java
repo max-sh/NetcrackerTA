@@ -5,9 +5,6 @@ package ua.edu.sumdu.ta.shestak.maksym.pr5;
  * @since 02.06.2016
  */
 
-
-import com.sun.javaws.exceptions.InvalidArgumentException;
-
 /**
  * The class that describes the type "task" data,
  * which contains information about the essence of the problem,
