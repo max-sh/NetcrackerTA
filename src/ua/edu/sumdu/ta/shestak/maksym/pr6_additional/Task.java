@@ -1,4 +1,4 @@
-package ua.edu.sumdu.ta.shestak.maksym.pr5;
+package ua.edu.sumdu.ta.shestak.maksym.pr6_additional;
 
 /**
  * @author <a href="mailto:slvr.max@gmail.com">Maksym Shestak</a>
@@ -11,6 +11,7 @@ package ua.edu.sumdu.ta.shestak.maksym.pr5;
  * its status (active / inactive), the time interval warning
  * time, through which you need to repeat the warning about it
  */
+@SuppressWarnings("Duplicates")
 public class Task {
     private String title;
     private boolean active;
@@ -208,5 +209,26 @@ public class Task {
                 getEndTime()    == ((Task) task).getEndTime();
     }
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Task task = new Task();
+
+        task.setTitle(getTitle());
+        task.setActive(isActive());
+        task.setTime(getStartTime(), getEndTime(), getRepeatInterval());
+
+        return task;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = title != null ? title.hashCode() : 0;
+        result = 31 * result + (active ? 1 : 0);
+        result = 31 * result + time;
+        result = 31 * result + startTime;
+        result = 31 * result + endTime;
+        result = 31 * result + repeatTime;
+        return result;
+    }
 
 }

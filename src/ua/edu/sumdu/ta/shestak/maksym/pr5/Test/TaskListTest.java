@@ -21,7 +21,6 @@ public abstract class TaskListTest {
         List<Task> actual = new ArrayList<Task>();
         for (Task task : actualA)
             actual.add(task);
-            
         for (Task task : expected)
             if (actual.contains(task))
                 actual.remove(task);
