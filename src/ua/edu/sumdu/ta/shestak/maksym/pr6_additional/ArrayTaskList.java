@@ -67,15 +67,6 @@ public class ArrayTaskList extends AbstractTaskList {
         itemsCount = newSize;
     }
 
-    /*
-    @Override
-    public Task getTask(int index) throws IndexOutOfBoundsException {
-        if(index >= 0 && index < itemsCount)
-            return taskArrayList[index];
-        else throw new IndexOutOfBoundsException();
-    }
-    */
-
     @Override
     public Task[] incoming(int from, int to) {
 
@@ -97,18 +88,9 @@ public class ArrayTaskList extends AbstractTaskList {
         return new ArrayTaskListIterator();
     }
 
-    @Override
-    public void forEach(Consumer<? super Task> action) {
-
-    }
-
-    @Override
-    public Spliterator<Task> spliterator() {
-        return null;
-    }
-
     private class ArrayTaskListIterator implements Iterator<Task> {
         private int index = 0;
+
         @Override
         public boolean hasNext() {
             return index < size();

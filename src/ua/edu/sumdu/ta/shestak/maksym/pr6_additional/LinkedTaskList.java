@@ -10,50 +10,6 @@ import java.util.function.Consumer;
  */
 @SuppressWarnings("Duplicates")
 public class LinkedTaskList extends AbstractTaskList {
-    @Override
-    public Iterator<Task> iterator() {
-        System.out.println("!!!!!!");
-        return new LinkedTaskListIterator();
-    }
-
-    @Override
-    public void forEach(Consumer<? super Task> action) {
-
-    }
-
-    @Override
-    public Spliterator<Task> spliterator() {
-        return null;
-    }
-
-    private class LinkedTaskListIterator implements Iterator<Task> {
-        private int index = 0;
-        @Override
-        public boolean hasNext() {
-            return index < size();
-        }
-
-        @Override
-        public Task next() throws IndexOutOfBoundsException {
-            if(index < 0 || index >= itemsCount || head == null)
-                throw new IndexOutOfBoundsException();
-
-            Task next = null;
-
-            if(index == 0)
-                next = head.getData();
-            else {
-                Element current = head;
-                for(int i = 0; i < index; i++) {
-                    current = current.getNext();
-                }
-                next = current.getData();
-            }
-            index++;
-            return next;
-        }
-    }
-
 
     private class Element {
         private Task data;
@@ -146,6 +102,41 @@ public class LinkedTaskList extends AbstractTaskList {
                 itemsCount--;
             }
             current = current.getNext();
+        }
+    }
+
+    @Override
+    public Iterator<Task> iterator() {
+        System.out.println("!!!!!!");
+        return new LinkedTaskListIterator();
+    }
+
+    private class LinkedTaskListIterator implements Iterator<Task> {
+        private int index = 0;
+
+        @Override
+        public boolean hasNext() {
+            return index < size();
+        }
+
+        @Override
+        public Task next() throws IndexOutOfBoundsException {
+            if(index < 0 || index >= itemsCount || head == null)
+                throw new IndexOutOfBoundsException();
+
+            Task next = null;
+
+            if(index == 0)
+                next = head.getData();
+            else {
+                Element current = head;
+                for(int i = 0; i < index; i++) {
+                    current = current.getNext();
+                }
+                next = current.getData();
+            }
+            index++;
+            return next;
         }
     }
 }
