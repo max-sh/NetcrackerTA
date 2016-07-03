@@ -86,9 +86,9 @@ public abstract class TaskListTest {
     }
 
     @Test
-    public void testEquals() throws CloneNotSupportedException {
+    public void testEquals() throws CloneNotSupportedException, IllegalAccessException, InstantiationException {
 
-        AbstractTaskList clone = new ArrayTaskList();
+        AbstractTaskList clone = tasks.getClass().newInstance();
 
         Task[] ts = new Task[50];
         for(int i = 0; i < 50; i++) {
@@ -98,6 +98,16 @@ public abstract class TaskListTest {
         addAll(ts);
 
         assertTrue(tasks.equals(clone));
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testIteratorOutOfBounds() {
+        Task[] ts = {task("A"), task("B"), task("C")};
+        addAll(ts);
+
+        Iterator iterator = tasks.iterator();
+
+        for(int i = 0; i <= ts.length; i++) iterator.next();
     }
 
     @Test
