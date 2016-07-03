@@ -72,9 +72,15 @@ public class ArrayTaskList extends AbstractTaskList {
 
         int incomingElements = 0;
         Task[] incomingArray = new Task[itemsCount];
+        /*
         for(int i = 0; i < itemsCount; i++) {
             if(taskArrayList[i].nextTimeAfter(from) > from && taskArrayList[i].nextTimeAfter(from) <= to)
                 incomingArray[incomingElements++] = taskArrayList[i];
+        }
+        */
+        for(Task t: this) {
+            if(t.nextTimeAfter(from) > from && t.nextTimeAfter(from) <= to)
+                incomingArray[incomingElements++] = t;
         }
 
         Task[] tmp = new Task[incomingElements];

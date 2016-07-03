@@ -51,13 +51,19 @@ public class LinkedTaskList extends AbstractTaskList {
         int incomingElements = 0;
         Task[] tmp = new Task[itemsCount];
 
+        /*
         while(current != null) {
             if(current.getData().nextTimeAfter(from) > from && current.getData().nextTimeAfter(from) <= to)
                 tmp[incomingElements++] = current.getData();
 
             current = current.getNext();
+        }*/
+
+        for(Task t: this) {
+            if(t.nextTimeAfter(from) > from && t.nextTimeAfter(from) <= to)
+                tmp[incomingElements++] = t;
         }
-        System.out.println(incomingElements);
+        //System.out.println(incomingElements);
 
         Task[] incomingArray = new Task[incomingElements];
         System.arraycopy(tmp, 0, incomingArray, 0, incomingElements);
@@ -107,7 +113,6 @@ public class LinkedTaskList extends AbstractTaskList {
 
     @Override
     public Iterator<Task> iterator() {
-        System.out.println("!!!!!!");
         return new LinkedTaskListIterator();
     }
 

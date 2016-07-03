@@ -53,7 +53,7 @@ public abstract class AbstractTaskList implements Iterable<Task>, Cloneable {
             stringBuilder.append(taskIterator.next().getTitle());
 
             while(taskIterator.hasNext()) {
-                stringBuilder.append(",").append(taskIterator.next().getTitle());
+                stringBuilder.append(", ").append(taskIterator.next().getTitle());
             }
         }
 
@@ -62,14 +62,10 @@ public abstract class AbstractTaskList implements Iterable<Task>, Cloneable {
     }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    public Object clone() throws CloneNotSupportedException {
         try {
             AbstractTaskList list = getClass().newInstance();
 
-//            Iterator<Task> taskIterator = iterator();
-//            while(taskIterator.hasNext()) {
-//                list.add(taskIterator.next());
-//            }
             for(Task task : this)
                 list.add(task);
 
@@ -101,4 +97,5 @@ public abstract class AbstractTaskList implements Iterable<Task>, Cloneable {
         }
         return equal;
     }
+
 }

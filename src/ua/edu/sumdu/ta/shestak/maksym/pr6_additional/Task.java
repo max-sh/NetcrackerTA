@@ -12,7 +12,7 @@ package ua.edu.sumdu.ta.shestak.maksym.pr6_additional;
  * time, through which you need to repeat the warning about it
  */
 @SuppressWarnings("Duplicates")
-public class Task {
+public class Task implements Cloneable {
     private String title;
     private boolean active;
 
@@ -62,9 +62,10 @@ public class Task {
      *
      * @param title task title
      */
-    public void setTitle(String title) throws IllegalArgumentException {
+    public Task setTitle(String title) throws IllegalArgumentException {
         if(title.equals("") || title == null) throw new IllegalArgumentException();
         this.title = title;
+        return this;
     }
 
     /**
@@ -81,8 +82,9 @@ public class Task {
      *
      * @param active статус задачи
      */
-    public void setActive(boolean active) {
+    public Task setActive(boolean active) {
         this.active = active;
+        return this;
     }
 
     /**
@@ -100,7 +102,7 @@ public class Task {
      *
      * @param time time notifications about the task
      */
-    public void setTime(int time) throws IllegalArgumentException {
+    public Task setTime(int time) throws IllegalArgumentException {
         if(time < 0)
             throw new IllegalArgumentException();
 
@@ -108,6 +110,7 @@ public class Task {
         this.startTime = time;
         this.endTime = time;
         this.repeatTime = 0;
+        return this;
     }
 
     /**
@@ -117,13 +120,14 @@ public class Task {
      * @param end    notification end time
      * @param repeat the time interval at which you need to repeat notification
      */
-    public void setTime(int start, int end, int repeat) throws IllegalArgumentException {
+    public Task setTime(int start, int end, int repeat) throws IllegalArgumentException {
         if(start < 0 || end < 0 || repeat < 0 || start > end)
             throw new IllegalArgumentException();
         this.time = start;
         this.startTime = start;
         this.endTime = end;
         this.repeatTime = repeat;
+        return this;
     }
 
     /**
@@ -224,27 +228,22 @@ public class Task {
                 getEndTime() == ((Task) task).getEndTime();
     }
 
+
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-        super.clone();
-
-        Task task = new Task();
-        task.setTitle(getTitle());
-        task.setActive(isActive());
-        task.setTime(getStartTime(), getEndTime(), getRepeatInterval());
-
-        return task;
+    public Object clone() throws CloneNotSupportedException {
+        return new Task().setTitle(getTitle())
+                         .setActive(isActive())
+                         .setTime(getStartTime(), getEndTime(), getRepeatInterval());
     }
 
     @Override
     public int hashCode() {
         int result = title != null ? title.hashCode() : 0;
         result = 31 * result + (active ? 1 : 0);
-        result += Integer.hashCode(time);
-        result += Integer.hashCode(startTime);
-        result += Integer.hashCode(endTime);
-        result += Integer.hashCode(repeatTime);
+        result = 31 * result + time;
+        result = 31 * result + startTime;
+        result = 31 * result + endTime;
+        result = 31 * result + repeatTime;
         return result;
     }
-
 }

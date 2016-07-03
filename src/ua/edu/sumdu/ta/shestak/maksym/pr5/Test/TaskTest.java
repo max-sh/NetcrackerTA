@@ -7,6 +7,7 @@ import ua.edu.sumdu.ta.shestak.maksym.pr5.Task;
 
 import static org.junit.Assert.*;
 
+@SuppressWarnings("Duplicates")
 public class TaskTest {
 
     @BeforeClass
