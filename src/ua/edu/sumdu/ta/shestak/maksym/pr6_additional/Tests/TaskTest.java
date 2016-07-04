@@ -45,7 +45,7 @@ public class TaskTest {
     }
 
     @Test
-    public void testHashcode() {
+    public void testHashcode() throws CloneNotSupportedException {
         Task task1 = new Task("task1", 1);;
         Task task2 = new Task("task2", 0, 100, 10);
 
@@ -54,5 +54,8 @@ public class TaskTest {
 
         Assert.assertEquals(task1.hashCode(), copy1.hashCode());
         Assert.assertEquals(task2.hashCode(), copy2.hashCode());
+
+        Assert.assertEquals(task1.hashCode(), task1.clone().hashCode());
+        Assert.assertEquals(task2.hashCode(), task2.clone().hashCode());
     }
 }
