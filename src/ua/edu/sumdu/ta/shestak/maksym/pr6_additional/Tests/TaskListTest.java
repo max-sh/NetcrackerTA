@@ -82,6 +82,8 @@ public abstract class TaskListTest {
         addAll(ts);
 
         AbstractTaskList clone = (AbstractTaskList) tasks.clone();
+        tasks = clone;
+
         assertContains(ts);
     }
 
