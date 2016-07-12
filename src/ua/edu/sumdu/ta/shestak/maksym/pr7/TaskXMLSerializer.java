@@ -22,6 +22,9 @@ import java.util.Iterator;
  */
 public class TaskXMLSerializer {
 
+    public static void main(String[] args) {
+
+    }
     public void save(AbstractTaskList object, String file)
             throws ParserConfigurationException, TransformerException {
 
