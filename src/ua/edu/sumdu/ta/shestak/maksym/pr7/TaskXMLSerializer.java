@@ -25,94 +25,102 @@ public class TaskXMLSerializer {
     public static void main(String[] args) {
 
     }
-    public void save(AbstractTaskList object, String file)
-            throws ParserConfigurationException, TransformerException {
-
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+    public void save(AbstractTaskList object, String file) {
 
 
-        // root elements
-        Document doc = docBuilder.newDocument();
-        Element rootElement = doc.createElement("tasks");
-        doc.appendChild(rootElement);
+        try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
 
-        Iterator<Task> iterator = object.iterator();
+            // root elements
+            Document doc = docBuilder.newDocument();
+            Element rootElement = doc.createElement("tasks");
+            doc.appendChild(rootElement);
 
-        Task task = null;
 
-        while(iterator.hasNext()) {
-            task = iterator.next();
+            Iterator<Task> iterator = object.iterator();
 
-            Element taskXml = doc.createElement("task");
-            taskXml.setAttribute("active", String.valueOf(task.isActive()));
-            taskXml.setAttribute("time", String.valueOf(task.getTime()));
-            taskXml.setAttribute("start", String.valueOf(task.getStartTime()));
-            taskXml.setAttribute("end", String.valueOf(task.getEndTime()));
-            taskXml.setAttribute("repeat", String.valueOf(task.getRepeatInterval()));
-            taskXml.setAttribute("repeated", String.valueOf(task.isRepeated()));
-            taskXml.appendChild(doc.createTextNode(task.getTitle()));
+            Task task = null;
 
-            rootElement.appendChild(taskXml);
+            while(iterator.hasNext()) {
+                task = iterator.next();
+
+                Element taskXml = doc.createElement("task");
+                taskXml.setAttribute("active", String.valueOf(task.isActive()));
+                taskXml.setAttribute("time", String.valueOf(task.getTime()));
+                taskXml.setAttribute("start", String.valueOf(task.getStartTime()));
+                taskXml.setAttribute("end", String.valueOf(task.getEndTime()));
+                taskXml.setAttribute("repeat", String.valueOf(task.getRepeatInterval()));
+                taskXml.setAttribute("repeated", String.valueOf(task.isRepeated()));
+                taskXml.appendChild(doc.createTextNode(task.getTitle()));
+
+                rootElement.appendChild(taskXml);
+            }
+
+            // write the content into xml file
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File(file));
+
+            // Output to console for testing
+            // StreamResult result = new StreamResult(System.out);
+
+            transformer.transform(source, result);
+
+            System.out.println("File saved!");
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
         }
-
-
-
-
-        // write the content into xml file
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-
-        DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new File(file));
-
-        // Output to console for testing
-        // StreamResult result = new StreamResult(System.out);
-
-        transformer.transform(source, result);
-
-        System.out.println("File saved!");
 
 
     }
 
-    public AbstractTaskList load(String file)
-            throws ParserConfigurationException, IOException, SAXException {
-
+    public AbstractTaskList load(String file) {
         AbstractTaskList list = new ArrayTaskList();
+        try {
+            File fXmlFile = new File(file);
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(fXmlFile);
 
-        File fXmlFile = new File(file);
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(fXmlFile);
+            doc.getDocumentElement().normalize();
 
-        doc.getDocumentElement().normalize();
-
-        NodeList nList = doc.getElementsByTagName("task");
+            NodeList nList = doc.getElementsByTagName("task");
 
 
-        for (int temp = 0; temp < nList.getLength(); temp++) {
+            for (int temp = 0; temp < nList.getLength(); temp++) {
 
-            Node nNode = nList.item(temp);
+                Node nNode = nList.item(temp);
 
-            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
-                Element eElement = (Element) nNode;
+                    Element eElement = (Element) nNode;
 
-                list.add(new Task(
-                        eElement.getTextContent(),
-                        Integer.parseInt(eElement.getAttribute("start")),
-                        Integer.parseInt(eElement.getAttribute("end")),
-                        Integer.parseInt(eElement.getAttribute("repeat")))
-                        .setActive(Boolean.parseBoolean(eElement.getAttribute("active"))));
+                    list.add(new Task(
+                            eElement.getTextContent(),
+                            Integer.parseInt(eElement.getAttribute("start")),
+                            Integer.parseInt(eElement.getAttribute("end")),
+                            Integer.parseInt(eElement.getAttribute("repeat")))
+                            .setActive(Boolean.parseBoolean(eElement.getAttribute("active"))));
+                }
             }
+
+
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-
         return list;
     }
 }
